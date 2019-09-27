@@ -7,18 +7,15 @@ import Input from "../components/Form/Input";
 import Button from "../components/Form/Button";
 import client from "../lib/client";
 import handleNetworkError from "../lib/handleNetworkError";
+import SEO from "../components/Page/SEO";
+import form from "../lib/formOnChange";
+import { LoginUserRedirect } from "../lib/auth";
 
 function signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordAccept, setPasswordAccept] = useState("");
   const [username, setUsername] = useState("");
-
-  function form(setter) {
-    return e => {
-      setter(e.target.value);
-    };
-  }
 
   function onSubmit(e) {
     e.preventDefault();
@@ -32,7 +29,7 @@ function signup() {
     }
     (async () => {
       try {
-        client.post("/visiable/user", { email, password, username });
+        await client.post("/visiable/user", { email, password, username });
         alert("가입이 완료되었습니다.");
         Router.push("/explore");
       } catch (e) {
@@ -42,30 +39,42 @@ function signup() {
   }
   return (
     <Layout>
+      <SEO title="회원가입" />
       <PageHeader>
         <h1>회원가입</h1>
       </PageHeader>
       <form onSubmit={onSubmit}>
-        <Input type="email" placeholder="이메일" onChange={form(setEmail)} />
+        <Input
+          type="email"
+          placeholder="이메일"
+          onChange={form(setEmail)}
+          value={email}
+        />
         <Input
           type="password"
           placeholder="패스워드"
           onChange={form(setPassword)}
+          value={password}
         />
         <Input
           type="password"
           placeholder="패스워드 확인"
           onChange={form(setPasswordAccept)}
+          value={passwordAccept}
         />
         <Input
           type="text"
           placeholder="유저 이름"
           onChange={form(setUsername)}
+          value={username}
         />
         <Button>가입</Button>
       </form>
     </Layout>
   );
 }
-
+signup.getInitialProps = async ctx => {
+  await LoginUserRedirect(ctx);
+  return {};
+};
 export default signup;
