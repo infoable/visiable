@@ -35,7 +35,7 @@ function Explore({ list, logined }) {
                   style={{ padding: "1em", border: "1px solid #EAEAEA" }}
                 >
                   {v.site}
-                  <Link href="/visiable/[id]" as={"/visiable/" + v._id}>
+                  <Link href={"/visiable/" + v._id}>
                     <Button filled>편집하기</Button>
                   </Link>
                   <span>{"/visiable/" + v._id}</span>
