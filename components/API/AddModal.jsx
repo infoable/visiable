@@ -17,7 +17,7 @@ function AddModal({ open, onClose, id }) {
         await client.post("/visiable/api/" + id + "/action", {
           name: action
         });
-        onClose();
+        onClose(true);
       } catch (e) {
         handleNetworkError(e);
       }
@@ -30,7 +30,7 @@ function AddModal({ open, onClose, id }) {
           <header>
             <h1>액션 추가하기.</h1>
           </header>
-          <form>
+          <form onSubmit={onsubmit}>
             <Input
               type="text"
               placeholder="액션 이름"

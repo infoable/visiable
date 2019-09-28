@@ -12,6 +12,7 @@ import Router from "next/router";
 
 function Make() {
   const [site, setSite] = useState("");
+  const [name, setName] = useState("");
   const [isMake, setMake] = useState(false);
 
   function onsubmit(e) {
@@ -22,7 +23,8 @@ function Make() {
         const data = await getData();
         const res = await client.post("/visiable/api", {
           by: data.data.id,
-          site
+          site,
+          name
         });
 
         Router.push("/visiable/" + res.data.id);
@@ -45,7 +47,13 @@ function Make() {
           <h1>어떤 사이트에 추가하기를 원하세요?</h1>
           <Input
             type="text"
-            placeholder="https://example.com/"
+            placeholder="사이트 이름"
+            value={name}
+            onChange={formOnChange(setName)}
+          />
+          <Input
+            type="text"
+            placeholder="example.com"
             value={site}
             onChange={formOnChange(setSite)}
           ></Input>
@@ -54,14 +62,6 @@ function Make() {
           </div>
         </form>
       )}
-      <iframe
-        src={site}
-        style={{
-          width: "100%",
-          margin: "20px 0",
-          height: "40vh"
-        }}
-      ></iframe>
     </Layout>
   );
 }
