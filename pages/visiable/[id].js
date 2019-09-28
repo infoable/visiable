@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout";
 import SEO from "../../components/Page/SEO";
 import { NotLoginUserRedirect } from "../../lib/auth";
@@ -12,11 +12,35 @@ import AddModal from "../../components/API/AddModal";
 import handleNetworkError from "../../lib/handleNetworkError";
 import APIWorkspace from "../../components/API/APIWorkspace";
 
-function API({ data, id }) {
-  const [open, setOpen] = useState(false);
-  const [datas, setData] = useState(data);
-  const [selected, setSelected] = useState(null);
+import { useRouter } from "next/router";
 
+function API() {
+  const [open, setOpen] = useState(false);
+  const [datas, setData] = useState({});
+  const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    (async () => {
+      try {
+        const res = await client.get("/visiable/api/" + id);
+        setData(res.data.data);
+        setLoading(false);
+      } catch (e) {
+        console.error(e);
+        handleNetworkError(e);
+      }
+    })();
+  }, [id]);
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
   function openAddAction() {
     setOpen(true);
   }
@@ -64,12 +88,5 @@ function API({ data, id }) {
     </Layout>
   );
 }
-API.getInitialProps = async ctx => {
-  await NotLoginUserRedirect(ctx);
-
-  const res = await client.get("/visiable/api/" + ctx.query.id);
-
-  return { data: res.data.data, id: ctx.query.id };
-};
 
 export default API;
