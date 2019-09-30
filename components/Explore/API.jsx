@@ -2,19 +2,19 @@ import React from 'react'
 import Link from 'next/link';
 import Button from '../Form/Button';
 
-const APIComponent = ({ site, _id, by, actions }) => {
+const APIComponent = ({ site, _id, by, actions, name }) => {
     return (
         <div style={{
             padding: "1em",
             border: "1px solid #EAEAEA",
             margin: '1em',
-            width: 200
+            width: 400
         }}
         >
             <h3 style={{
                 textAlign: 'center',
                 marginBottom: '1em'
-            }}>{site}</h3>
+            }}>{site} [{name}]</h3>
             {by && <div style={{ marginBottom: 10 }}>{by.username}님이 만듦</div>}
             {
                 actions &&
