@@ -15,7 +15,7 @@ const APIComponent = ({ site, _id, by }) => {
                 textAlign: 'center',
                 marginBottom: '1em'
             }}>{site}</h3>
-            {by && <div style={{ marginBottom: 10 }}>{by.username}이 만듦</div>}
+            {by && <div style={{ marginBottom: 10 }}>{by.username}님이 만듦</div>}
             {!by && <Link href={"/visiable/" + _id}><Button filled>편집하기</Button></Link>}
         </div>
     )
