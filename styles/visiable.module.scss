@@ -1,0 +1,10 @@
+.editorBox {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 640px) {
+    .editorBox {
+        flex-direction: column;
+    }
+}

@@ -10,7 +10,6 @@ const APIWorkspace = ({ target, id, refresh }) => {
   const [aid, name] = target;
   const [workflows, setWorkflows] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(id, aid);
 
   useEffect(() => {
     setLoading(true);
@@ -49,6 +48,19 @@ const APIWorkspace = ({ target, id, refresh }) => {
           workflows
         });
         alert("저장 완료");
+        refresh();
+      } catch (e) {
+        handleNetworkError(e);
+      }
+    })();
+  }
+  function deleteThis() {
+    const i = prompt("정말 삭제하시겠습니까? 삭제하시려면 이 액션의 이름을 입력해주세요.: " + name);
+    if (i !== name) return;
+    (async () => {
+      try {
+        await client.delete(`/visiable/api/${id}/action/${aid}`);
+        alert("삭제가 완료되었습니다.");
         refresh();
       } catch (e) {
         handleNetworkError(e);
@@ -107,7 +119,10 @@ const APIWorkspace = ({ target, id, refresh }) => {
           })}
         </div>
       </div>
-      <Button onClick={save}>저장하기</Button>
+      <div style={{ display: 'flex' }}>
+        <Button onClick={save} style={{ marginRight: 10 }}>저장하기</Button>
+        <Button onClick={deleteThis} red>삭제하기</Button>
+      </div>
     </div>
   );
 };

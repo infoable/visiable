@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout";
 import SEO from "../../components/Page/SEO";
-import { NotLoginUserRedirect } from "../../lib/auth";
 import client from "../../lib/client";
 
 import List from "@material-ui/core/List";
@@ -13,6 +12,8 @@ import handleNetworkError from "../../lib/handleNetworkError";
 import APIWorkspace from "../../components/API/APIWorkspace";
 
 import { useRouter } from "next/router";
+
+import style from '../../styles/visiable.module.scss';
 
 function API() {
   const [open, setOpen] = useState(false);
@@ -55,6 +56,7 @@ function API() {
     try {
       const res = await client.get("/visiable/api/" + id);
       setData(res.data.data);
+      setSelected(null)
     } catch (e) {
       handleNetworkError(e);
     }
@@ -63,7 +65,7 @@ function API() {
     <Layout>
       <SEO title={datas.site}></SEO>
       <AddModal open={open} onClose={closeAddAction} id={id} />
-      <div style={{ display: "flex" }}>
+      <div className={style.editorBox}>
         <List style={{ flex: 1 }}>
           {datas.actions.map(v => (
             <ListItem
