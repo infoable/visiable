@@ -7,8 +7,9 @@ import Button from "../components/Form/Button";
 import Link from "next/link";
 import { getData } from "../lib/auth";
 import client from "../lib/client";
+import APIComponent from "../components/Explore/API";
 
-function Explore({ list, logined }) {
+function Explore({ list, logined, anotherList }) {
   return (
     <Layout>
       <SEO title="API"></SEO>
@@ -22,43 +23,46 @@ function Explore({ list, logined }) {
         <>
           <div>
             <h1>API 만들기</h1>
-            <Link href="/make">
-              <Button>만들기</Button>
-            </Link>
+            <div style={{ marginTop: 10 }}>
+              <Link href="/make">
+                <Button>만들기</Button>
+              </Link>
+            </div>
           </div>
           <div style={{ marginTop: 20 }}>
             <h1>내 API</h1>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", flexWrap: 'wrap' }}>
               {list.map((v, i) => (
-                <div
-                  key={i}
-                  style={{ padding: "1em", border: "1px solid #EAEAEA" }}
-                >
-                  {v.site}
-                  <Link href={"/visiable/" + v._id}>
-                    <Button filled>편집하기</Button>
-                  </Link>
-                  <span>{"/visiable/" + v._id}</span>
-                </div>
+                <APIComponent key={i} {...v} />
               ))}
             </div>
           </div>
         </>
       )}
+      <div style={{ marginTop: 20 }}>
+        <h1>다른 사람들의 API</h1>
+        <div style={{ display: "flex", flexWrap: 'wrap' }}>
+          {anotherList.map((v, i) => (
+            <APIComponent key={i} {...v} />
+          ))}
+        </div>
+      </div>
     </Layout>
   );
 }
 
 Explore.getInitialProps = async ctx => {
   const user = await getData(ctx);
-  if (!user) return { logined: false };
+  const anotherList = await client.get('/visiable/api');
+  if (!user) return { logined: false, anotherList: anotherList.data.data };
   const userId = user.data.id;
 
   const list = await client.get("/visiable/api/user/" + userId);
 
   return {
     logined: true,
-    list: list.data.apis
+    list: list.data.apis,
+    anotherList: anotherList.data.data
   };
 };
 

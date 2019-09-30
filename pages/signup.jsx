@@ -31,7 +31,7 @@ function signup() {
       try {
         await client.post("/visiable/user", { email, password, username });
         alert("가입이 완료되었습니다.");
-        Router.push("/explore");
+        Router.push("/");
       } catch (e) {
         handleNetworkError(e);
       }

@@ -4,7 +4,9 @@ import Input from "../Form/Input";
 const Workflow = ({ title, columns, onDestroy, setColumns }) => {
   return (
     <div>
-      <div>
+      <div style={{
+        textAlign: 'right'
+      }}>
         <div
           onClick={onDestroy}
           role="button"
